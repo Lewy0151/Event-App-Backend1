@@ -1,4 +1,5 @@
 const User = require('../Models/User');
+const bcrypt = require('bcrypt');
 
 exports.register = async (req, res) => {
   const { email, password } = req.body;
@@ -15,13 +16,18 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     console.log(req.body);
   const { email, password } = req.body;
+
+if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
+
   try {
     const user = await User.findOne({ email });
-    if (!user) {
+     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-
-    if (user.password !== password) {
+     const isMatch = await bcrypt.compare(password, user.password);
+     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
