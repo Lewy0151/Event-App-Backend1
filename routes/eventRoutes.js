@@ -8,4 +8,7 @@ router.get('/', getEvents);
 // Create new event
 router.post('/', addEvent);
 
+// // Create new event
+// router.delete('/', addDelete);
+
 module.exports = router;
